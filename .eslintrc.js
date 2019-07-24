@@ -7,6 +7,7 @@ module.exports = {
   },
   rules: {
     'no-process-exit': 'off',
+    'react/prop-types': 1,
     'object-shorthand': 'off',
     'class-methods-use-this': 'off',
     'no-debugger': 0,
