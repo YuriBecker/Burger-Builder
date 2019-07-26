@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Burger from '../../components/Burger/Burger';
 
 class BurguerBuilder extends Component {
@@ -14,10 +14,10 @@ class BurguerBuilder extends Component {
   render() {
     const { ingredients } = this.state;
     return (
-      <Fragment>
+      <>
         <Burger ingredients={ingredients} />
         <div>CONTROLS</div>
-      </Fragment>
+      </>
     );
   }
 }
