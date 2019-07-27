@@ -5,9 +5,15 @@ import styles from './Burger.module.css';
 
 const burger = (props) => {
   const { ingredients } = props;
-  const transformedIngredients = Object.keys(ingredients).map(ingredientName => [...Array(ingredients[ingredientName])].map((ing, index) => (
-    <BurgerIngredient key={ingredientName + index} type={ingredientName} />
-  )));
+  let transformedIngredients = Object.keys(ingredients)
+    .map(ingredientName => [...Array(ingredients[ingredientName])].map((ing, index) => (
+      <BurgerIngredient key={ingredientName + index} type={ingredientName} />
+    )))
+    .reduce((prevValue, currentValue) => prevValue.concat(currentValue), []);
+
+  if (transformedIngredients.length === 0) {
+    transformedIngredients = <h2>Please, add ingredients!</h2>;
+  }
 
   return (
     <div className={styles.Burger}>
