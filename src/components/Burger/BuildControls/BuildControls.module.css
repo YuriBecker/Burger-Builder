@@ -9,6 +9,10 @@
   padding: 10px 0;
 }
 
+.BuildControls strong {
+  margin-left: 10px;
+}
+
 .OrderButton {
   background-color: #dad735;
   outline: none;
