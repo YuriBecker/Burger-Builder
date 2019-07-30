@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './BuildControls.module.css';
 import BuildControl from './BuildControl/BuildControl';
 
@@ -9,14 +10,40 @@ const controls = [
   { text: 'Salad', type: 'salad' }
 ];
 
-const BuildControls = () => (
-  <div className={styles.BuildControls}>
-    {controls.map(control => (
-      <BuildControl key={control.text} text={control.text} />
-    ))}
-  </div>
-);
+const BuildControls = (props) => {
+  const { price, canPurchase } = props;
+  return (
+    <div className={styles.BuildControls}>
+      <p>
+        Price:
+        <strong>{price.toFixed(2)}</strong>
+      </p>
+      {controls.map(control => (
+        <BuildControl
+          key={control.text}
+          text={control.text}
+          more={() => props.addFunction(control.type)}
+          less={() => props.removeFunction(control.type)}
+          disabled={props.disabled[control.type]}
+        />
+      ))}
+      <button
+        type="button"
+        className={styles.OrderButton}
+        disabled={!canPurchase}
+      >
+        Order Now
+      </button>
+    </div>
+  );
+};
 
-BuildControls.propTypes = {};
+BuildControls.propTypes = {
+  addFunction: PropTypes.func.isRequired,
+  removeFunction: PropTypes.func.isRequired,
+  disabled: PropTypes.object.isRequired,
+  price: PropTypes.number.isRequired,
+  canPurchase: PropTypes.bool.isRequired
+};
 
 export default BuildControls;
