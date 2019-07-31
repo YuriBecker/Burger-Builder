@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Burger from '../../components/Burger/Burger';
 import BurgerControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENTS_PRICES = {
   meat: 1.25,
@@ -27,6 +29,7 @@ function BurguerBuilder() {
   });
 
   const [canPurchase, setCanPurchase] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
 
   const addIngredientHandler = (type) => {
     const updatedNumber = ingredients[type] + 1;
@@ -38,6 +41,23 @@ function BurguerBuilder() {
     const oldPrice = price;
     setPrice(oldPrice + priceAdd);
   };
+
+  useEffect(() => {
+    const disabled = { ...ingredients };
+    const ingArray = Object.entries(ingredients);
+    for (const [ing, count] of ingArray) {
+      disabled[ing] = count <= 0;
+    }
+    setDisabledButtons(disabled);
+
+    const listIngredients = {
+      ...ingredients
+    };
+    const sum = Object.keys(listIngredients)
+      .map(key => listIngredients[key])
+      .reduce((s, el) => s + el, 0);
+    setCanPurchase(sum > 0);
+  }, [ingredients]);
 
   const removeIngredientHandler = (type) => {
     const oldNumberOfIngredients = ingredients[type];
@@ -53,26 +73,15 @@ function BurguerBuilder() {
     }
   };
 
-  useEffect(() => {
-    const disabled = { ...ingredients };
-    const ingArray = Object.entries(ingredients);
-    for (const [ing, count] of ingArray) {
-      disabled[ing] = count <= 0;
-    }
-    setDisabledButtons(disabled);
+  const purchaseHandler = () => setPurchasing(true);
 
-    const listIngredients = {
-      ...ingredients
-    };
-
-    const sum = Object.keys(listIngredients)
-      .map(key => listIngredients[key])
-      .reduce((s, el) => s + el, 0);
-    setCanPurchase(sum > 0);
-  }, [ingredients]);
+  const purchaseCancelHandler = () => setPurchasing(false);
 
   return (
     <>
+      <Modal show={purchasing} closeModal={purchaseCancelHandler}>
+        <OrderSummary ingredients={ingredients} />
+      </Modal>
       <Burger ingredients={ingredients} />
       <BurgerControls
         price={price}
@@ -80,6 +89,7 @@ function BurguerBuilder() {
         removeFunction={removeIngredientHandler}
         disabled={disabledButtons}
         canPurchase={canPurchase}
+        ordered={purchaseHandler}
       />
     </>
   );
