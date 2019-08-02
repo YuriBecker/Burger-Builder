@@ -19,7 +19,7 @@ function BurguerBuilder() {
     salad: 0
   });
 
-  const [price, setPrice] = useState(5);
+  const [price, setPrice] = useState(2);
 
   const [disabledButtons, setDisabledButtons] = useState({
     meat: false,
@@ -77,10 +77,19 @@ function BurguerBuilder() {
 
   const purchaseCancelHandler = () => setPurchasing(false);
 
+  const purchaseContinueHandler = () => {
+    alert('Continue!');
+  };
+
   return (
     <>
       <Modal show={purchasing} closeModal={purchaseCancelHandler}>
-        <OrderSummary ingredients={ingredients} />
+        <OrderSummary
+          ingredients={ingredients}
+          purchaseCanceled={purchaseCancelHandler}
+          purchaseContinued={purchaseContinueHandler}
+          price={price}
+        />
       </Modal>
       <Burger ingredients={ingredients} />
       <BurgerControls
